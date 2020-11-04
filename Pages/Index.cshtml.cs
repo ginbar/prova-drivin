@@ -50,19 +50,6 @@ namespace prova_drivin.Pages
             }
         }
 
-        [HttpGet("download")]
-        public  IActionResult FileDownload([FromQuery] string path)
-        {
-            Console.WriteLine(path);
-            var net = new System.Net.WebClient();
-            var data = net.DownloadData(path);
-            var content = new System.IO.MemoryStream(data);
-            var contentType = "text/plain";
-            var fileName = path.Split("/").Last();
-            
-            return File(content, contentType, fileName);
-        }
-
         private IList<string> ExtractEmails(string fileContent) 
         {
             return fileContent
