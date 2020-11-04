@@ -1,0 +1,74 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<style>
+    h1 {
+        font-size: medium;
+    }
+    .row-with-top-margin {
+        margin-top: 30px;
+    }
+</style>
+
+<script>
+    window.onload = function () {
+        $('#file').change(function () {
+            console.log(this, this.value)
+            $('#submit-button').prop('disabled', this.value == null)
+        })
+    }
+</script>
+
+<div class="text-center">
+    <h1>Separador de E-mails</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file" class="btn">Selecione um arquivo</label>
+                        <input id="file" type="file" asp-for="UploadFile">
+                    </div>
+                    <button id="submit-button" class="btn btn-primary" disabled>Separar</button>
+                </form>
+            </div>
+        </div>
+        <div class="row row-with-top-margin">
+            <div class="col-md-12">
+                <div>
+                    @if(Model.EmailsFiles.Count() == 0) 
+                    {
+                        <span>Não há e-mails a serem exibidos.</span>
+                    }
+                    <ul>
+                    @foreach (var file in Model.EmailsFiles)
+                    {
+                        <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col"><a>#</a></th>
+                            <th scope="col">
+                                <a href="emailfiles/@file.Name" download="@file.Name">@file.Name</a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var (email, index) in file.Emails.Select((email, index) => (email, index)))
+                            {
+                                <tr>
+                                    <th scope="row">@(index + 1)</th>
+                                    <td>@email</td>
+                                </tr>    
+                            }
+                        </tbody>
+                        </table>
+                    }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
